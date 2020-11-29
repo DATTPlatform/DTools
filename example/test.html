@@ -1,0 +1,215 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Encrypted Message Example</title>
+    <style>
+        label {
+            min-width: 200px;
+            display:inline-block;
+            text-align: right;
+            vertical-align: top;
+        }
+        input,textarea {
+            width: 540px;
+        }
+        textarea {
+            height: 100px;
+        }
+        .row {
+            padding: 10px 0px;
+
+        }
+        .row-btn {
+            padding-left: 646px;
+        }
+        button {
+            height: 30px;
+            width: 100px;
+            border-radius: 3px;
+            background-color: darkturquoise;
+            color: #fff;
+            font-size: 16px;
+            margin-right: 0px;
+        }
+        .left {
+            vertical-align: top;
+            padding: 10px;
+            list-style-type: none;
+            display: inline-block;
+            width: 20%;
+        }
+        .left > li {
+            margin: 5px;
+            cursor: pointer;
+        }
+        .right {
+            display: inline-block;
+            padding: 10px;
+            width: 70%;
+            border-left: 1px solid #ddd;
+        }
+        .right > div {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div class="left">
+        <li data-v="create"><a>Apply Name</a></li>
+        <li data-v="send">Send Message</li>
+        <li data-v="view">View Message</li>
+    </div>
+    <div class="right">
+        <div id="create">
+            <!--<h1>绑定邮箱地址</h1>-->
+            <div class="row"><label for="1_address">Account Address：</label><input id="1_address" type="text" size="100"  /></div>
+            <div class="row"><label for="1_mailAddress">Name：</label><input id="1_mailAddress" size="100" /><br></div>
+            <div class="row"><label>Password:</label><input id="1_password" type="password"  ><br></div>
+            <div class="row row-btn"><button id="createMail" >Submit:</button></div>
+            <label id="1_res"></label>
+        </div>
+        <div id="send">
+            <!--<h1>发送邮件</h1>-->
+            <div class="row"><label class="label">Receiver Name：</label><input id="2_mailAddress" type="text" size="100"  /><br></div>
+            <div class="row"><label>Sender Name：</label><input id="2_address" size="100" /><br></div>
+            <div class="row"><label>Password：</label><input id="2_password" type="password"  ><br></div>
+            <div class="row"><label>Title：</label><input id="2_title" type="text" size="100"  /><br></div>
+            <div class="row"><label>Content：</label><textarea rows="30" cols="100" id="2_content" ></textarea><br></div>
+            <div class="row row-btn"><button id="sendMail" >Send</button><br></div>
+            <label id="2_res"></label><br>
+        </div>
+        <div id="view">
+            <!--<h1>查看邮件内容</h1>-->
+            <div class="row"><label>Sender/Receiver Name：</label><input id="3_address" type="text" size="100"  /></div>
+            <div class="row"><label>Password：</label><input id="3_password" type="password"  ></div>
+            <div class="row"><label>hash：</label><input id="3_hash" type="text" size="100"  /><br></div>
+            <div class="row row-btn"><button id="viewMail" >View</button><br></div>
+            <div class="row"><span id="3_res"></span></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+
+    function formatJson(msg) {
+        var rep = "~";
+        var jsonStr = JSON.stringify(msg, null, rep)
+        var str = "";
+        for (var i = 0; i < jsonStr.length; i++) {
+            var text2 = jsonStr.charAt(i)
+            if (i > 1) {
+                var text = jsonStr.charAt(i - 1)
+                if (rep != text && rep == text2) {
+                    str += "<br/>"
+                }
+            }
+            str += text2;
+        }
+        jsonStr = "";
+        for (var i = 0; i < str.length; i++) {
+            var text = str.charAt(i);
+            if (rep == text)
+                jsonStr += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+            else {
+                jsonStr += text;
+            }
+            if (i == str.length - 2)
+                jsonStr += "<br/>"
+        }
+        return jsonStr;
+    }
+
+    $(function () {
+        $("#create").show();
+        $("#createMail").click(function(){
+            var address = $("#1_address").val();
+            var mailAddress = $("#1_mailAddress").val();
+            var password = $("#1_password").val();
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:9999/mail/createMailAddress",
+                data: JSON.stringify({
+                    "address" : address,
+                    "password" : password,
+                    "mailAddress" : mailAddress
+                }),
+                success: function(data){
+                    console.log(data)
+                    if(data.success){
+                        $("#1_res").text(data.data);
+                    }else{
+                        $("#1_res").text(data.msg)
+                    }
+                },
+                contentType: 'application/json',
+                dataType: "json"
+            });
+        });
+        $("#sendMail").click(function(){
+            var address = $("#2_address").val();
+            var mailAddress = $("#2_mailAddress").val();
+            var password = $("#2_password").val();
+            var title = $("#2_title").val();
+            var content = $("#2_content").val();
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:9999/mail/sendMail",
+                data: JSON.stringify({
+                    "senderAddress" : address,
+                    "password" : password,
+                    "mailAddress" : mailAddress,
+                    "title" : title,
+                    "content" : content
+                }),
+                success: function(data){
+                    console.log(data)
+                    if(data.success){
+                        $("#2_res").text((data.data));
+                    }else{
+                        $("#2_res").text(data.msg)
+                    }
+                },
+                contentType: 'application/json',
+                dataType: "json"
+            });
+        });
+        $("#viewMail").click(function(){
+            var address = $("#3_address").val();
+            var hash = $("#3_hash").val();
+            var password = $("#3_password").val();
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:9999/mail/viewMail",
+                data: JSON.stringify({
+                    "mailAddress" : address,
+                    "password" : password,
+                    "hash" : hash
+                }),
+                success: function(data){
+                    console.log(data)
+                    if(data.success){
+                        $("#3_res").html(formatJson(data.data));
+                    }else{
+                        $("#3_res").text(data.msg)
+                    }
+                },
+                contentType: 'application/json',
+                dataType: "json"
+            });
+        });
+
+        $(".left > li").click(function(){
+            $(".right > div").hide();
+            $("#" + $(this).data("v")).show();
+        })
+
+    });
+</script>
+</body>
+</html>
