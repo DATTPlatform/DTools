@@ -132,12 +132,12 @@ serverIp=0.0.0.0
 #httpServer的启动port
 serverPort=18004
 
-[nuls-module-web-wallet]
+[datt-module-web-wallet]
 apiModuleApi=http://127.0.0.1:18003/
 webWalletPort=8006
 webWalletHost=0.0.0.0
 
-[nuls-module-explorer]
+[datt-module-explorer]
 apiModuleApi=http://127.0.0.1:18003/
 explorerPort=1999
 explorerHost=0.0.0.0

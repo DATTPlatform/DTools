@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.nuls.v2.module</groupId>
-    <artifactId>nuls-module-web-wallet</artifactId>
+    <artifactId>datt-module-web-wallet</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -127,7 +127,7 @@
     </dependencies>
 
     <build>
-        <finalName>nuls-module-web-wallet</finalName>
+        <finalName>datt-module-web-wallet</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
