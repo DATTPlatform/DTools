@@ -5,11 +5,11 @@ JOPT_XMX=128
 JAVA_OPTS=
 
 [Core]
-APP_NAME=nuls-module-web-wallet
+APP_NAME=datt-module-web-wallet
 VERSION=1.0.0
 Managed=1
 
-[nuls-module-web-wallet]
+[datt-module-web-wallet]
 apiModuleApi=http://127.0.0.1:18003/
 webWalletPort=18004
 webWalletHost=0.0.0.0
